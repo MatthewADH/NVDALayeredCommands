@@ -1,9 +1,12 @@
 # layers/layer.py
 # A part of the Layered Commands NVDA addon
+# Layer class to be inherited by layers, contains gesture map and help message
 # Copyright (C) Matthew Duffell-Hoffman
 # This file is covered by the GNU General Public License.
+# See the file COPYING for more details.
 
 from pathlib import Path
+
 import scriptHandler
 from scriptHandler import script
 import ui
@@ -31,7 +34,7 @@ class Layer():
 	def getGestureMap(self):
 		return self._gestureMap
 
-	@script()
+	@script(description="Displays the help window for the layer if available")
 	def script_helpMessage(self, gesture):
 		if self._helpMessage:
 			ui.browseableMessage(
@@ -43,4 +46,5 @@ class Layer():
 			)
 			scriptHandler.executeScript(self._handler.script_close, gesture)
 		else:
+			# Translators: Announced when help window is requested but unavailible 
 			ui.message("no help message availible")

@@ -1,10 +1,12 @@
 # layeredCommands.py
 # A part of the Layered Commands NVDA addon
+# Contains current layer state and gesture look up logic
 # Copyright (C) Matthew Duffell-Hoffman
 # This file is covered by the GNU General Public License.
+# See the file COPYING for more details.
 
-import globalPluginHandler
 import globalCommands
+import globalPluginHandler
 from scriptHandler import script
 import tones
 import ui
@@ -31,6 +33,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def setActiveLayer(self, name):
 		self.activeLayer = self.layers[name]
 
+	# Override 
 	def getScript(self, gesture):
 		"""Retrieve the script bound to a given gesture.
 		@param gesture: The input gesture in question.
@@ -38,6 +41,7 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		@return: The script function or C{None} if none was found.
 		@rtype: script function
 		"""
+		# If not in layered command mode, use original getScript behavior
 		if self.activeLayer == None:
 			return super().getScript(gesture)
 
@@ -55,9 +59,11 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 				)
 				return None
 		else:
+			# If gesture is not found in the current layer, exit layered command mode, does not pass gesture through rest of look up
 			return self.script_close
 
 	@script(
+		# Translators: Input help mode message for toggle layered command mode.
 		description=_("Activates Layered Command mode"),
 		category=globalCommands.SCRCAT_INPUT,
 		gesture="kb:NVDA+alt+space"
@@ -66,7 +72,9 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 		tones.beep(550, 50)
 		self.activeLayer = self.layers["first"]
 
-	@script()
+	@script(
+		description="Exits layered command mode"
+	)
 	def script_close(self, gesture):
 		tones.beep(300, 50)
 		self.activeLayer = None

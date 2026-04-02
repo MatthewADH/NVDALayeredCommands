@@ -1,16 +1,16 @@
 # layers/first.py
 # A part of the Layered Commands NVDA addon
+# Root layer, basic commands and branches to other layers 
 # Copyright (C) Matthew Duffell-Hoffman
 # This file is covered by the GNU General Public License.
+# See the file COPYING for more details.
 
 import api
 import config
-from documentBase import DocumentWithTableNavigation
 import globalCommands
 import scriptHandler
 from scriptHandler import script
 import speech
-import speechViewer
 import textInfos
 import ui
 
@@ -34,37 +34,39 @@ class FirstLayer(Layer):
 		helpFile = "first.help.html"
 		super().__init__(name, gestureMap, handler, helpFile)
 
-	@script()
+	@script(description="toggle screen curtain on/off")
 	def script_screenCurtain(self, gesture):
 		scriptHandler.executeScript(globalCommands.commands.script_toggleScreenCurtain, gesture)
 		scriptHandler.executeScript(self._handler.script_close, gesture)
 
-	@script()
+	@script(description="Announce text on clipboard")
 	def script_clipboard(self, gesture):
 		scriptHandler.executeScript(globalCommands.commands.script_reportClipboardText, gesture)
 		scriptHandler.executeScript(self._handler.script_close, gesture)
 
-	@script()
+	@script(description="Cycle audio ducking mode")
 	def script_ducking(self, gesture):
 		scriptHandler.executeScript(globalCommands.commands.script_cycleAudioDuckingMode, gesture)
 		scriptHandler.executeScript(self._handler.script_close, gesture)
 
-	@script()
+	@script(description="Toggle Speech Viewer on/off")
 	def script_speechHistory(self, gesture):
 		scriptHandler.executeScript(globalCommands.commands.script_toggleSpeechViewer, gesture)
 		scriptHandler.executeScript(self._handler.script_close, gesture)
 
-	@script()
+	@script(description="Toggle notification announcements")
 	def script_toastNotifications(self, gesture):
 		if config.conf["presentation"]["reportHelpBalloons"]:
 			config.conf["presentation"]["reportHelpBalloons"] = False
+			# Translators: Notification reporting toggled off
 			ui.message(_("Report notifications off"))
 		else:
 			config.conf["presentation"]["reportHelpBalloons"] = True
+			# Translators: Notification reporting toggled on
 			ui.message(_("Report notifications on"))
 		scriptHandler.executeScript(self._handler.script_close, gesture)
 
-	@script()
+	@script(description="Toggle speech mode between talk and on demand")
 	def script_speech(self, gesture):
 		curMode = speech.getState().speechMode
 		speech.setSpeechMode(speech.SpeechMode.talk)
@@ -79,7 +81,7 @@ class FirstLayer(Layer):
 		speech.setSpeechMode(newMode)
 		scriptHandler.executeScript(self._handler.script_close, gesture)
 
-	@script()
+	@script(description="Toggle speech mode between on demand and off")
 	def script_speechMute(self, gesture):
 		curMode = speech.getState().speechMode
 		speech.setSpeechMode(speech.SpeechMode.talk)
@@ -94,11 +96,12 @@ class FirstLayer(Layer):
 		speech.setSpeechMode(newMode)
 		scriptHandler.executeScript(self._handler.script_close, gesture)
 
-	@script()
+	@script(description="Activate table layer")
 	def script_table(self, gesture):
 		obj = api.getCaretObject()
 		if not hasattr(obj, '_maybeGetLayoutTableIds'):
-			ui.message('not in a table')
+			# Translators: Announced when table layer attempted to activate while not in a table cell
+			ui.message(_("not in a table"))
 			scriptHandler.executeScript(self._handler.script_close, gesture)
 			return
 		info = obj.selection
@@ -118,13 +121,17 @@ class FirstLayer(Layer):
 			if "table-columnnumber" in attrs and not attrs.get("table-layout"):
 				break
 		else:
-			ui.message('not in a table')
+			# Translators: Announced when table layer attempted to activate while not in a table cell
+			ui.message(_("not in a table"))
 			scriptHandler.executeScript(self._handler.script_close, gesture)
 			return
-		ui.message('table layer')
+		# Translators: Announced when table layer activated
+		ui.message(_("table layer"))
+		# Table layer must be instantiated on activation using the spacific table object
 		self._handler.activeLayer = TableLayer(self._handler, obj)
 
-	@script()
+	@script(description="Activates the volume layer")
 	def script_volume(self, gesture):
-		ui.message("volume")
+		# Translators: Announced on activation of the volume layer
+		ui.message(_("volume"))
 		self._handler.setActiveLayer("volume")

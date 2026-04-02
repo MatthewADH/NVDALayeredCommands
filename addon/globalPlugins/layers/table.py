@@ -1,7 +1,9 @@
 # layers/table.py
 # A part of the Layered Commands NVDA addon
+# Table layer for navigating tables using simple gestures
 # Copyright (C) Matthew Duffell-Hoffman
 # This file is covered by the GNU General Public License.
+# See the file COPYING for more details.
 
 import api
 import config
@@ -54,8 +56,7 @@ class TableLayer(Layer):
 			"kb:control+home": self.script_firstCell,
 			"kb:control+numpad7": self.script_firstCell,
 			"kb:control+end": self.script_lastCell,
-			"kb:control+numpad1": self.script_lastCell,
-
+			"kb:control+numpad1": self.script_lastCell
 		}
 		if hasattr(obj, "script_nextTable"):
 			gestureMap["kb:control+enter"] = obj.script_nextTable
@@ -72,7 +73,7 @@ class TableLayer(Layer):
 
 		super().__init__(name, gestureMap, handler, helpFile)
 
-	@script()
+	@script(description="Read the current table cell")
 	def script_sayCurrentCell(self, gesture):
 		formatConfig = config.conf["documentFormatting"].copy()
 		formatConfig["reportTables"] = True
@@ -80,13 +81,15 @@ class TableLayer(Layer):
 		info = self._obj._getTableCellAt(cell.tableID, self._obj.selection, cell.row, cell.col)
 		speech.speakTextInfo(info, formatConfig=formatConfig, reason=controlTypes.OutputReason.QUERY)
 
-	@script()
+	@script(description"Next table command is unavailible")
 	def script_nextTableNotSupported(self, gesture):
-		ui.message("next table is not supported in this context")
+		# Translators: Announced when next table gesture is pressed but command is not supported
+		ui.message(_("next table is not supported in this context"))
 
-	@script()
+	@script(description"previous table command is unavailible)
 	def script_previousTableNotSupported(self, gesture):
-		ui.message("previous table is not supported in this context")
+		# Translators: Announced when previous table gesture is pressed but command is not supported
+		ui.message(_("previous table is not supported in this context"))
 
 	@script()
 	def script_firstCell(self, gesture):
