@@ -1,5 +1,6 @@
 # layers/volume/system.py
 # A part of the Layered Commands NVDA addon
+# Layer for controlling system volume
 # Copyright (C) Matthew Duffell-Hoffman
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
@@ -31,42 +32,41 @@ class SystemLayer(Layer):
 		}
 		super().__init__(name, gestureMap, handler, helpFile)
 
-	@script()
+	@script(description="Increases system  volume by 2%")
 	def script_up(self, gesture):
 		targetVolume = self.getVolume() + 2
 		self.setVolume(targetVolume)
-		ui.message(f"{self.getVolume()} percent")
+		ui.message(f"{self.getVolume()}%")
 
-	@script()
+	@script(description="Decreases system  volume by 2% to a minimum of 10%")
 	def script_down(self, gesture):
 		targetVolume = self.getVolume() - 2
 		self.setVolume(targetVolume)
-		ui.message(f"{self.getVolume()} percent")
+		ui.message(f"{self.getVolume()}%")
 
-	@script()
+	@script(description="Increases system  volume by 10%")
 	def script_pageUp(self, gesture):
 		targetVolume = self.getVolume() + 10
 		self.setVolume(targetVolume)
-		ui.message(f"{self.getVolume()} percent")
+		ui.message(f"{self.getVolume()}%")
 
-	@script()
+	@script(description="Decreases system  volume by 10% to a minimum of 10%")
 	def script_pageDown(self, gesture):
 		targetVolume = self.getVolume() - 10
 		self.setVolume(targetVolume)
-		ui.message(f"{self.getVolume()} percent")
+		ui.message(f"{self.getVolume()}%")
 
-	@script()
+	@script(description="Sets system  volume to 10%")
 	def script_home(self, gesture):
 		targetVolume = 10
 		self.setVolume(targetVolume)
-		ui.message(f"{targetVolume} percent")
+		ui.message(f"{targetVolume}%")
 
-	@script()
+	@script(description="Sets system  volume to 100%")
 	def script_end(self, gesture):
 		targetVolume = 100
 		self.setVolume(targetVolume)
 		ui.message(f"{targetVolume} percent")
-
 
 	def getVolume(self):
 		volume = self.getVolumeInterface().GetMasterVolumeLevelScalar()
@@ -87,4 +87,3 @@ class SystemLayer(Layer):
 			None
 		)
 		return endpoint.QueryInterface(IAudioEndpointVolume)
-

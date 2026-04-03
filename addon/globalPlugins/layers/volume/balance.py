@@ -1,5 +1,6 @@
 # layers/volume/balance.py
 # A part of the Layered Commands NVDA addon
+# Allows setting of sound splitting with arrow key selection
 # Copyright (C) Matthew Duffell-Hoffman
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
@@ -22,19 +23,19 @@ class BalanceLayer(Layer):
 		}
 		super().__init__(name, gestureMap, handler, helpFile)
 
-	@script()
+	@script(description="Sets sound split  to  both left and right")
 	def script_off(self, gesture):
 		audio._setSoundSplitState(audio.SoundSplitState.NVDA_BOTH_APPS_BOTH)
 		ui.message(audio.SoundSplitState.NVDA_BOTH_APPS_BOTH.displayString)
 		scriptHandler.executeScript(self._handler.script_close, gesture)
 
-	@script()
+	@script(description="Sets sound split to NVDA on left and system on right")
 	def script_left(self, gesture):
 		audio._setSoundSplitState(audio.SoundSplitState.NVDA_LEFT_APPS_RIGHT)
 		ui.message(audio.SoundSplitState.NVDA_LEFT_APPS_RIGHT.displayString)
 		scriptHandler.executeScript(self._handler.script_close, gesture)
 
-	@script()
+	@script(description="Sets sound split to NVDA on right and system on left")
 	def script_right(self, gesture):
 		audio._setSoundSplitState(audio.SoundSplitState.NVDA_RIGHT_APPS_LEFT)
 		ui.message(audio.SoundSplitState.NVDA_RIGHT_APPS_LEFT.displayString)

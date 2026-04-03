@@ -1,5 +1,6 @@
 # layers/volume/volume.py
 # A part of the Layered Commands NVDA addon
+# Layer to redirect to volume control layers
 # Copyright (C) Matthew Duffell-Hoffman
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
@@ -25,27 +26,31 @@ class VolumeLayer(Layer):
 		}
 		super().__init__(name, gestureMap, handler, helpFile)
 
-	@script()
+	@script(description="Activates the sound splitting layer")
 	def script_balance(self, gesture):
-		ui.message("balance")
+		# Translators: Announced when sound splitting layer is activated
+		ui.message(_("balance"))
 		self._handler.setActiveLayer("volume-balance")
 
-	@script()
+	@script(description="Activates the sound card layer")
 	def script_card(self, gesture):
-		ui.message("sound card")
+		# Translators: Announced when sound card layer is activated
+		ui.message(_("sound card"))
 		self._handler.setActiveLayer("volume-card")
 
-	@script()
+	@script(description="Activates the NVDA volume  layer")
 	def script_nvda(self, gesture):
-		ui.message("NVDA")
+		# Translators: Announced when NVDA layer is activated
+		ui.message(_("NVDA"))
 		self._handler.setActiveLayer("volume-nvda")
 
-	@script()
+	@script(description="Activates the system volume layer")
 	def script_system(self, gesture):
-		ui.message("system")
+		# Translators: Announced when sound splitting layer is activated
+		ui.message(_("system"))
 		self._handler.setActiveLayer("volume-system")
 
-	@script()
+	@script(description="Toggles system mute")
 	def script_mute(self, gesture):
 		device = AudioUtilities.GetSpeakers()
 		endpoint = device.Activate(
@@ -57,7 +62,7 @@ class VolumeLayer(Layer):
 
 		if volume.GetMute():
 			volume.SetMute(0, None)
+			# Translators: Announced when system is unmuted
 			ui.message(_("Unmuted"))
 		else:
 			volume.SetMute(1, None)
-

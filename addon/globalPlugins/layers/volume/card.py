@@ -1,5 +1,6 @@
 # layers/volume/card.py
 # A part of the Layered Commands NVDA addon
+# Allows changing of NVDA sound card with arrow keys
 # Copyright (C) Matthew Duffell-Hoffman
 # This file is covered by the GNU General Public License.
 # See the file COPYING for more details.
@@ -23,14 +24,15 @@ class CardLayer(Layer):
 		}
 		super().__init__(name, gestureMap, handler, helpFile)
 
-	@script()
+	@script(description="Cycles NVDA output to the previous sound card")
 	def script_up(self, gesture):
 		self.changeCard(-1)
 
-	@script()
+	@script(description="Cycles NVDA output to the next sound card")
 	def script_down(self, gesture):
 		self.changeCard(1)
 
+	# Cycles sound card with a step of -1 or 1 to choose direction
 	def changeCard(self, step):
 		deviceIds, deviceNames = zip(*mmdevice.getOutputDevices(includeDefault=True))
 		selectedOutputDevice = config.conf["audio"]["outputDevice"]

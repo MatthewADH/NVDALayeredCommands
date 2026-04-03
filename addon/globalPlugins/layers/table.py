@@ -81,19 +81,20 @@ class TableLayer(Layer):
 		info = self._obj._getTableCellAt(cell.tableID, self._obj.selection, cell.row, cell.col)
 		speech.speakTextInfo(info, formatConfig=formatConfig, reason=controlTypes.OutputReason.QUERY)
 
-	@script(description"Next table command is unavailible")
+	@script(description="Announces next table command is unavailible")
 	def script_nextTableNotSupported(self, gesture):
 		# Translators: Announced when next table gesture is pressed but command is not supported
 		ui.message(_("next table is not supported in this context"))
 
-	@script(description"previous table command is unavailible)
+	@script(description="Announces previous table command is unavailible")
 	def script_previousTableNotSupported(self, gesture):
 		# Translators: Announced when previous table gesture is pressed but command is not supported
 		ui.message(_("previous table is not supported in this context"))
 
-	@script()
+	@script(description="Moves to cell in first colum and first row")
 	def script_firstCell(self, gesture):
-		ui.message("first cell")
+		# Translators: Announced when focus is moved to first cell in a table
+		ui.message(_("first cell"))
 		curMode = speech.getState().speechMode
 		speech.setSpeechMode(speech.SpeechMode.off)
 		speech.cancelSpeech()
@@ -101,9 +102,10 @@ class TableLayer(Layer):
 		speech.setSpeechMode(curMode )
 		self._obj._tableMovementScriptHelper(axis=_Axis.COLUMN, movement=_Movement.FIRST)
 
-	@script()
+	@script(description="Moves to cell in last  colum and last  row")
 	def script_lastCell(self, gesture):
-		ui.message("last cell")
+		# Translators: Announced when focus is moved to last  cell in a table
+		ui.message(_("last cell"))
 		curMode = speech.getState().speechMode
 		speech.setSpeechMode(speech.SpeechMode.off)
 		speech.cancelSpeech()
